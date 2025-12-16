@@ -1,4 +1,4 @@
-# openapi-spec-tools
+# rich-objects
 
 This is a small set of tools to help provide easy to use, flexible tools for display complex objects for a CLI.
 
