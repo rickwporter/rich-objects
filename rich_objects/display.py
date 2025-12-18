@@ -237,6 +237,7 @@ def display(
     indent: int = 2,
     columns: Optional[list[str]] = None,
     console: Optional[Console] = None,
+    config: Optional[TableConfig] = None,
 ) -> None:
     """Display the data provided in obj, according to the formating arguments."""
     no_color = style != OutputStyle.ALL
@@ -259,6 +260,6 @@ def display(
         console.print("Nothing found")
         return
 
-    table = rich_table_factory(obj, columns=columns)
+    table = rich_table_factory(obj, columns=columns, config=config)
     console.print(table)
     return
