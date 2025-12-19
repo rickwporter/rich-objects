@@ -579,3 +579,36 @@ def test_column_list_table(columns: list[str], out_fmt, expected: str):
 
         assert _expected == _actual
 
+SIMPLE_CONFIG_TABLE = """\
+┏━━━━━━━━━━━━━━┓
+┃ Simple stuff ┃
+┡━━━━━━━━━━━━━━┩
+│ str value    │
+├──────────────┤
+│ 3            │
+├──────────────┤
+│ 4            │
+├──────────────┤
+│ False        │
+├──────────────┤
+│ None         │
+├──────────────┤
+│ foo          │
+└──────────────┘
+Got 6 simple    
+things          
+"""  # noqa: W291
+
+def test_display_with_config():
+    data = deepcopy(SIMPLE_LIST)
+    config = TableConfig(
+        items_caption="Got {} simple things",
+        items_label="Simple stuff",
+    )
+    with mock.patch('sys.stdout', new_callable=StringIo) as mock_stdout:
+        display(data, OutputFormat.TABLE, OutputStyle.NONE, config=config)
+
+    _actual = mock_stdout.getvalue()
+    actual = to_ascii(_actual)
+    expected = to_ascii(SIMPLE_CONFIG_TABLE)
+    assert expected == actual
