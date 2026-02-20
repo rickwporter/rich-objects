@@ -232,8 +232,8 @@ def rich_table_factory(
 
 def display(
     obj: Any,
-    fmt: OutputFormat,
-    style: OutputStyle,
+    fmt: OutputFormat = OutputFormat.TABLE,
+    style: OutputStyle = OutputStyle.ALL,
     indent: int = 2,
     columns: Optional[list[str]] = None,
     console: Optional[Console] = None,
