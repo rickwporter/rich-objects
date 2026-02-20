@@ -1,6 +1,6 @@
 [project]
 name = "rich-objects"
-version = "0.2.2"
+version = "0.2.3"
 description = "Tools to rich print complex objects (e.g. JSON responses)"
 authors = [
     {name = "Rick Porter",email = "rickwporter@gmail.com"}
