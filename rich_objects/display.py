@@ -239,7 +239,18 @@ def display(
     console: Optional[Console] = None,
     config: Optional[TableConfig] = None,
 ) -> None:
-    """Display the data provided in obj, according to the formating arguments."""
+    """Display the data provided in obj, according to the formating arguments.
+
+    Arguments:
+    obj: object to be displayed
+    fmt: controls the json/table/yaml output formatting (default=table)
+    style: controls color/bold highlighting (default=all)
+    indent: conroles number of indented spaces in json/yaml output (default=2)
+    columns: used to control columns for a list of items, use a '*' as last argument to get remaining data.
+    console: overrides default rich.Console, so you can provide additional highlighers.
+    config: controls table parameters (e.g. labels, max-widths, row properties)
+
+    """
     no_color = style != OutputStyle.ALL
     highlight = style != OutputStyle.NONE
     console = console or console_factory(no_color=no_color, highlight=highlight)
