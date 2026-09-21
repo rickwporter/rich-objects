@@ -7,7 +7,7 @@ This is a small set of tools to help provide easy to use, flexible tools for dis
 The project has been published to PyPi, so you should be able to install it with something like one of the following (depending on how you do Python package management):
 ```terminal
 % pip install rich-objects
-% poetry add rich-objects
+% uv add rich-objects
 ```
 
 The sections below provide a brief description with links to more examples and details.
@@ -28,15 +28,22 @@ Here are some of the lower level elements:
 
 ## Examples
 
-In general, this can be used in any enviroment where CLI output is used. 
+In general, this can be used in any enviroment where CLI output is used. The shell commands below assume the `example.py` file is executable (e.g. `chmod a+x example.py`).
 
 ### Typer Example
 
 Here's a simple Python example to leverage the new code:
 ```Python
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.9"
+# dependencies = [
+#     "rich-objects",
+#     "typer",
+# ]
+# ///
 from typer import Typer
-from rich_objects import OutputFormat, display
+from rich_objects import OutputFormat, OutputStyle, display
 
 DATA = [
     {"name": "sna", "prop1": 1, "prop B": None, "blah": "zay"},
@@ -55,7 +62,7 @@ app = Typer()
 
 @app.command()
 def print_data(
-    output_fmt: OutputFormat = OutputFormat.TEXT,
+    output_fmt: OutputFormat = OutputFormat.TABLE,
     output_style: OutputStyle = OutputStyle.ALL,
     indent: int = 2,
 ):
@@ -117,4 +124,11 @@ Found 3 items
 
 ## Contributing
 
-This project is just getting going... More development instructions will be added later. If you have any suggestions, please email Rick directly (rickwporter@gmail.com).
+This project uses [uv](https://docs.astral.sh/uv/) for packaging and development:
+
+```terminal
+uv sync
+make lint test
+```
+
+If you have any suggestions, please email Rick directly (rickwporter@gmail.com).
