@@ -32,25 +32,15 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install poetry
-        uses: abatilo/actions-poetry@v4
-      - name: Setup a virtual environment
-        run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
-      - uses: actions/cache@v3
-        name: Cache venv
-        with:
-          path: ./.venv
-          key: venv-${{ hashFiles('poetry.lock') }}
+          enable-cache: true
       - name: Install the project dependencies
-        run: poetry install
+        run: uv sync --frozen
       - name: Test
-        run: poetry run coverage run -m pytest --showlocals -v tests
+        run: uv run coverage run -m pytest --showlocals -v tests
         env:
           COVERAGE_FILE: coverage/.coverage.${{ runner.os }}-py${{ matrix.python-version }}
           CONTEXT: ${{ runner.os }}-py${{ matrix.python-version }}
@@ -70,17 +60,13 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.12'
-      - name: Install poetry
-        uses: abatilo/actions-poetry@v4
-      - name: Setup a virtual environment
-        run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
+          python-version: "3.12"
+          enable-cache: true
       - name: Install the project dependencies
-        run: poetry install
+        run: uv sync --frozen
       - name: Get coverage files
         uses: actions/download-artifact@v4
         with:
@@ -90,11 +76,11 @@ jobs:
       - name: List coverage files
         run: ls -la coverage
       - name: Combine coverage
-        run: poetry run coverage combine coverage
+        run: uv run coverage combine coverage
       - name: Coverage report
-        run: poetry run coverage report --skip-empty --show-missing --include=rich_objects/*
+        run: uv run coverage report --skip-empty --show-missing --include=rich_objects/*
       - name: Coverage HTML
-        run: poetry run coverage html --show-contexts --title "Coverage for ${{ github.sha }}" --include=rich_objects/*
+        run: uv run coverage html --show-contexts --title "Coverage for ${{ github.sha }}" --include=rich_objects/*
       - name: Store coverage HTML
         uses: actions/upload-artifact@v4
         with:
