@@ -13,8 +13,8 @@ from rich_objects.enums import OutputFormat
 from rich_objects.enums import OutputStyle
 from rich_objects.rich_table import RichTable
 from rich_objects.table_config import TableConfig
+from rich_objects.utils import to_ascii
 from tests.helpers import StringIo
-from tests.helpers import to_ascii
 
 SIMPLE_DICT = {
     "abc": "def",
