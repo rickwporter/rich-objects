@@ -1,6 +1,6 @@
 [project]
 name = "rich-objects"
-version = "0.3.0"
+version = "0.3.1"
 description = "Tools to rich print complex objects (e.g. JSON responses)"
 authors = [
     {name = "Rick Porter",email = "rickwporter@gmail.com"}
@@ -96,4 +96,3 @@ exclude_lines = [
     "@overload",
     'if __name__ == "__main__":',
 ]
-
