@@ -19,3 +19,9 @@ def test_console_factory_env():
 def test_console_factory_pytest():
     uut = console_factory()
     assert TEST_TERMINAL_WIDTH == uut._width
+
+
+def test_console_factory_default():
+    with mock.patch.dict(os.environ, {}, clear=True):
+        uut = console_factory()
+    assert uut._width is None

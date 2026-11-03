@@ -46,6 +46,6 @@ test: ## Run unit tests (use TEST_TARGET to scope)
 	$(uv_run) pytest -v $(TEST_TARGET)
 
 cov: ## Run unit tests with code coverage measurments (use TEST_TARGET to scope)
-	$(uv_run) coverage run -m pytest -v $(TEST_TARGET)
+	$(uv_run) coverage run --branch -m pytest -v $(TEST_TARGET)
 	$(uv_run) coverage report -m
 	$(uv_run) coverage html
