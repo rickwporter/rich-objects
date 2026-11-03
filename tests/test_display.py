@@ -352,6 +352,41 @@ def test_create_table_config_fields():
     assert right == "ftp://typer.tiangolo.com/virtual-environments/#..."
 
 
+def test_create_table_config_scalar_tokens():
+    data = [
+        {"name": "sna", "data": None},
+        {"name": "foo", "data": [True, None, False]},
+        {"name": "bar", "data": False},
+    ]
+    config = TableConfig(
+        none_value="null",
+        true_value="yes",
+        false_value="no",
+    )
+
+    uut = rich_table_factory(data, config)
+    assert [column.header for column in uut.columns] == ["Name", "Data"]
+    assert uut.columns[0]._cells == ["sna", "foo", "bar"]
+    assert uut.columns[1]._cells == ["null", "yes, null, no", "no"]
+
+    long_values = {
+        "abcdefghijklmnop": "a" * 30,
+    }
+    truncated = rich_table_factory(
+        long_values,
+        TableConfig(ellipsis="~", key_max_len=8, value_max_len=10),
+    )
+    assert truncated.columns[0]._cells == ["abcdefg~"]
+    assert truncated.columns[1]._cells == ["aaaaaaaaa~"]
+
+
+def test_create_table_config_wildcard_label():
+    data = deepcopy(COLUMN_LIST)
+    config = TableConfig(wildcard_label="Other fields")
+    uut = rich_table_factory(data, config, columns=["service", "*", "id"])
+    assert [column.header for column in uut.columns] == ["Service", "Other fields", "Id"]
+
+
 def test_create_table_config_inner_list():
     data = deepcopy(INNER_LIST)
     config = TableConfig(

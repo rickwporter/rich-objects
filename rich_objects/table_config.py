@@ -4,12 +4,16 @@ from dataclasses import field
 from typing import Any
 
 from rich_objects.constants import DEFAULT_ROW_PROPS
+from rich_objects.constants import ELLIPSIS
+from rich_objects.constants import FALSE_VALUE
 from rich_objects.constants import FOUND_ITEMS
 from rich_objects.constants import ITEMS
 from rich_objects.constants import KEY_FIELDS
 from rich_objects.constants import KEY_MAX_LEN
+from rich_objects.constants import NONE_VALUE
 from rich_objects.constants import PROPERTIES
 from rich_objects.constants import PROPERTY
+from rich_objects.constants import TRUE_VALUE
 from rich_objects.constants import UNKNOWN
 from rich_objects.constants import URL_MAX_LEN
 from rich_objects.constants import URL_PREFIXES
@@ -31,6 +35,11 @@ class TableConfig:
     value_label: str = VALUE
     values_label: str = VALUES
     unknown_label: str = UNKNOWN
+    ellipsis: str = ELLIPSIS
+    wildcard_label: str = PROPERTIES
+    none_value: str = NONE_VALUE
+    true_value: str = TRUE_VALUE
+    false_value: str = FALSE_VALUE
     items_caption: str = FOUND_ITEMS
     url_prefixes: list[str] = field(default_factory=lambda: URL_PREFIXES)
     url_max_len: int = URL_MAX_LEN
