@@ -24,7 +24,7 @@ def headerize(s: str) -> str:
 
 def _truncate(s: str, max_length: int, ellipsis: str) -> str:
     """Truncate the provided string to a maximum of max_length (including elipsis)."""
-    if len(s) < max_length:
+    if len(s) <= max_length:
         return s
     return s[: max_length - len(ellipsis)] + ellipsis
 
