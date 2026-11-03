@@ -7,8 +7,6 @@ from rich.console import Console
 from rich.markup import escape
 
 from rich_objects.console import console_factory
-from rich_objects.constants import ELLIPSIS
-from rich_objects.constants import PROPERTIES
 from rich_objects.constants import WILDCARD_COLUMN
 from rich_objects.enums import OutputFormat
 from rich_objects.enums import OutputStyle
@@ -21,16 +19,25 @@ from rich_objects.table_config import TableConfig
 
 def headerize(s: str) -> str:
     """Create a table header from the provided string."""
-    if s == WILDCARD_COLUMN:
-        return PROPERTIES
     return s[0].upper() + s[1:]
 
 
-def _truncate(s: str, max_length: int) -> str:
+def _truncate(s: str, max_length: int, ellipsis: str) -> str:
     """Truncate the provided string to a maximum of max_length (including elipsis)."""
     if len(s) < max_length:
         return s
-    return s[: max_length - 3] + ELLIPSIS
+    return s[: max_length - len(ellipsis)] + ellipsis
+
+
+def _scalar_text(v: Any, config: TableConfig) -> str:
+    """Convert a scalar to its configured table text, escaping data values."""
+    if v is None:
+        return config.none_value
+    if v is True:
+        return config.true_value
+    if v is False:
+        return config.false_value
+    return escape(str(v))
 
 
 def _get_name_key(item: dict[Any, Any], key_fields: list[str]) -> Optional[str]:
@@ -105,7 +112,7 @@ def _create_list_table(
             # id may be an int, so convert to string before truncating
             name = _safe(item.pop(name_key, config.unknown_label))
             body = _table_cell_value(item.get(other_key), config)
-            table.add_row(_truncate(name, config.key_max_len), body)
+            table.add_row(_truncate(name, config.key_max_len, config.ellipsis), body)
         return table
 
     # create a table with identifier in left column, and rest of data in right column
@@ -121,7 +128,7 @@ def _create_list_table(
         # id may be an int, so convert to string before truncating
         name = _safe(item.pop(name_key, config.unknown_label))
         body = _table_cell_value(item, config)
-        table.add_row(_truncate(name, config.key_max_len), body)
+        table.add_row(_truncate(name, config.key_max_len, config.ellipsis), body)
 
     return table
 
@@ -139,7 +146,10 @@ def _create_object_table(
     )
     for k, v in obj.items():
         name = _safe(k)
-        table.add_row(_truncate(name, config.key_max_len), _table_cell_value(v, config))
+        table.add_row(
+            _truncate(name, config.key_max_len, config.ellipsis),
+            _table_cell_value(v, config),
+        )
 
     return table
 
@@ -157,24 +167,26 @@ def _table_cell_value(obj: Any, config: TableConfig) -> Any:
         if isinstance(obj[0], dict):
             value = _create_list_table(obj, outer=False, config=config)
         else:
-            values = [str(x) for x in obj]
-            s = _safe(", ".join(values))
-            value = _truncate(s, config.value_max_len)
+            values = [_scalar_text(x, config) for x in obj]
+            s = ", ".join(values)
+            value = _truncate(s, config.value_max_len, config.ellipsis)
     else:
-        s = _safe(obj)
+        s = _scalar_text(obj, config)
         max_len = (
             config.url_max_len
             if _is_url(s, config.url_prefixes)
             else config.value_max_len
         )
-        value = _truncate(s, max_len)
+        value = _truncate(s, max_len, config.ellipsis)
 
     return value
 
 
 def _create_list_columns_table(items: list[dict[str, Any]], columns: list[str], config: TableConfig) -> RichTable:
     """Create a table with the provided columns."""
-    headers = [headerize(c) for c in columns]
+    headers = [
+        config.wildcard_label if c == WILDCARD_COLUMN else headerize(c) for c in columns
+    ]
     table = RichTable(
         *headers, outer=True, show_lines=True, row_props=config.row_properties
     )

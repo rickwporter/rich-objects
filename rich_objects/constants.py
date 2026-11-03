@@ -10,6 +10,9 @@ VALUES = gettext("Values")
 UNKNOWN = gettext("Unknown")
 FOUND_ITEMS = gettext("Found {} items")
 ELLIPSIS = gettext("...")
+NONE_VALUE = gettext("None")
+TRUE_VALUE = gettext("True")
+FALSE_VALUE = gettext("False")
 
 OBJECT_HEADERS = [PROPERTY, VALUE]
 
