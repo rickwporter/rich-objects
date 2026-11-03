@@ -299,7 +299,7 @@ def test_create_table_config_truncated():
     index = 3
     left = col0._cells[index]
     right = col1._cells[index]
-    assert left == "l..."
+    assert left == "long"
     assert right == "ftp://typer.t..."
 
 
