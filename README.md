@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/rickwporter/rich-objects/branch/main/graph/badge.svg)](https://codecov.io/gh/rickwporter/rich-objects)
+
 # rich-objects
 
 This is a small set of tools to help provide easy to use, flexible tools for display complex objects for a CLI.
