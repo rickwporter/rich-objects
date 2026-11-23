@@ -82,6 +82,6 @@ jobs:
       - name: Coverage XML
         run: uv run coverage xml --include=rich_objects/*
       - name: Upload coverage reports to Codecov
-          uses: codecov/codecov-action@v5
-          with:
-            token: ${{ secrets.CODECOV_TOKEN }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
